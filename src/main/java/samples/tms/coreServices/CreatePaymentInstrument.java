@@ -4,15 +4,17 @@ import Api.PaymentInstrumentApi;
 import Invokers.ApiClient;
 import Invokers.ApiException;
 import Model.Body2;
+import Model.InlineResponse2016;
 import Model.InstrumentidentifiersCard;
 import Model.PaymentinstrumentsBillTo;
 import Model.PaymentinstrumentsCard;
 import Model.PaymentinstrumentsCard.TypeEnum;
 import Model.PaymentinstrumentsInstrumentIdentifier;
 
-public class CreatePaymentInstruments {
+public class CreatePaymentInstrument {
 	private String responseCode = null;
-	private String responseMsg = null;
+	private String status=null;
+	static InlineResponse2016 response;
 	private String profileId="93B32398-AD51-4CC2-A682-EA3E93614EB1";
 
 	Body2 body;
@@ -36,7 +38,7 @@ public class CreatePaymentInstruments {
 		billTo.administrativeArea("CA");
 		billTo.postalCode("90200");
 		billTo.country("US");
-		billTo.email("john.smith@example.com");
+		billTo.email("test@cybs.com");
 		billTo.phoneNumber("555123456");
 		body.billTo(billTo);
 		
@@ -52,31 +54,34 @@ public class CreatePaymentInstruments {
 	}
 
 	public static void main(String args[]) throws Exception {
-		new CreatePaymentInstruments();
+		new CreatePaymentInstrument();
 	}
 
-	public CreatePaymentInstruments() throws Exception {
+	public CreatePaymentInstrument() throws Exception {
 		process();
 	}
 
-	private void process() throws Exception {
+	public InlineResponse2016 process() throws Exception {
 
 		try {
 			body = getRequest();
 			
 
 			PaymentInstrumentApi paymentInstrumentApi = new PaymentInstrumentApi();
-			paymentInstrumentApi.paymentinstrumentsPost(profileId, body);
+			response=paymentInstrumentApi.paymentinstrumentsPost(profileId, body);
 
-			responseCode = ApiClient.resp;
-			responseMsg = ApiClient.respmsg;
-			System.out.println("ResponseCode :" + responseCode);
-			System.out.println("ResponseMessage :" + responseMsg);
+			responseCode=ApiClient.responseCode;
+			status=ApiClient.status;
+			
+			System.out.println("ResponseCode :" +responseCode);
+			System.out.println("Status :" +status);
+			System.out.println(response.getId());
 
 		} catch (ApiException e) {
 
 			e.printStackTrace();
 		}
+		return response;
 	}
 
 

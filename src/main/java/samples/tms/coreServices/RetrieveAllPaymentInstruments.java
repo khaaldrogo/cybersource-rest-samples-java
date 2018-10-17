@@ -3,18 +3,20 @@ package samples.tms.coreServices;
 import Api.InstrumentIdentifierApi;
 import Invokers.ApiClient;
 import Invokers.ApiException;
+import Model.InlineResponse2008;
 
-public class RetrieveAllPaymentInstrumentsAssociatedWithInstrumentIdentifier {
+public class RetrieveAllPaymentInstruments {
 	private String profileId="93B32398-AD51-4CC2-A682-EA3E93614EB1";
 	private String responseCode=null;
-	private String responseMsg=null;
+	private String status=null;
+	static InlineResponse2008 response;
 	private String tokenId="7020000000000137654";
 	
 	public static void main(String args[]) throws Exception {
-		new RetrieveAllPaymentInstrumentsAssociatedWithInstrumentIdentifier();
+		new RetrieveAllPaymentInstruments();
 	}
 
-	public RetrieveAllPaymentInstrumentsAssociatedWithInstrumentIdentifier() throws Exception {
+	public RetrieveAllPaymentInstruments() throws Exception {
 	
 		process();
 	}
@@ -24,12 +26,14 @@ public class RetrieveAllPaymentInstrumentsAssociatedWithInstrumentIdentifier {
 	try {
 		
 		InstrumentIdentifierApi instrumentIdentifierApi = new InstrumentIdentifierApi();
-		instrumentIdentifierApi.instrumentidentifiersTokenIdPaymentinstrumentsGet(profileId, tokenId, null,null);
+		response=instrumentIdentifierApi.instrumentidentifiersTokenIdPaymentinstrumentsGet(profileId, tokenId, null,null);
 		
-		responseCode=ApiClient.resp;
-		responseMsg=ApiClient.respmsg;
+		responseCode=ApiClient.responseCode;
+		status=ApiClient.status;
+		
 		System.out.println("ResponseCode :" +responseCode);
-		System.out.println("ResponseMessage :" +responseMsg);
+		System.out.println("Status :" +status);
+		System.out.println(response.getCount());
 		
 	
 	} catch (ApiException e) {

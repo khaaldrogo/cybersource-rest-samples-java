@@ -1,9 +1,9 @@
-package samples.tms.paymentsWithToken;
+package samples.tms.coreServices;
 
 import Api.PaymentInstrumentApi;
 import Invokers.ApiClient;
 import Invokers.ApiException;
-import Model.Body2;
+import Model.Body3;
 import Model.InlineResponse2016;
 import Model.InstrumentidentifiersCard;
 import Model.PaymentinstrumentsBillTo;
@@ -11,16 +11,17 @@ import Model.PaymentinstrumentsCard;
 import Model.PaymentinstrumentsCard.TypeEnum;
 import Model.PaymentinstrumentsInstrumentIdentifier;
 
-public class PaymentsInstrumentsForAuthorization {
+public class UpdatePaymentInstrument {
 	private String responseCode = null;
 	private String status=null;
 	static InlineResponse2016 response;
 	private String profileId="93B32398-AD51-4CC2-A682-EA3E93614EB1";
+	private String tokenId="76C16E5FCB608FEAE05340588D0ADAB1";
 
-	Body2 body;
+	Body3 body;
 
-	private Body2 getRequest() {
-		body = new Body2();
+	private Body3 getRequest() {
+		body = new Body3();
 		
 		PaymentinstrumentsCard card=new PaymentinstrumentsCard();
 		card.expirationMonth("09");
@@ -29,18 +30,19 @@ public class PaymentsInstrumentsForAuthorization {
 		body.card(card);
 		
 		PaymentinstrumentsBillTo billTo=new PaymentinstrumentsBillTo();
-		billTo.firstName("john");
+		billTo.firstName("John");
 		billTo.lastName("Deo");
-		billTo.company("Cybersource");
-		billTo.address1("12 Main Street");
-		billTo.address2("20 My Street");
-		billTo.locality("Foster City");
+		billTo.company("CyberSource");
+		billTo.address1("1 Market St");
+		billTo.address2("20 Main Street");
+		billTo.locality("san francisco");
 		billTo.administrativeArea("CA");
-		billTo.postalCode("90200");
+		billTo.postalCode("94105");
 		billTo.country("US");
-		billTo.email("john.smith@example.com");
+		billTo.email("test@cybs.com");
 		billTo.phoneNumber("555123456");
 		body.billTo(billTo);
+
 		
 		InstrumentidentifiersCard instrumentidentifiersCard=new InstrumentidentifiersCard();
 		instrumentidentifiersCard.number("4111111111111111");
@@ -54,21 +56,21 @@ public class PaymentsInstrumentsForAuthorization {
 	}
 
 	public static void main(String args[]) throws Exception {
-		new PaymentsInstrumentsForAuthorization();
+		new UpdatePaymentInstrument();
 	}
 
-	public PaymentsInstrumentsForAuthorization() throws Exception {
+	public UpdatePaymentInstrument() throws Exception {
 		process();
 	}
 
-	private void process() throws Exception {
+	public InlineResponse2016 process() throws Exception {
 
 		try {
 			body = getRequest();
+			
 
 			PaymentInstrumentApi paymentInstrumentApi = new PaymentInstrumentApi();
-			response=paymentInstrumentApi.paymentinstrumentsPost(profileId, body);
-
+			response=paymentInstrumentApi.paymentinstrumentsTokenIdPatch(profileId, tokenId, body);
 
 			responseCode=ApiClient.responseCode;
 			status=ApiClient.status;
@@ -81,6 +83,7 @@ public class PaymentsInstrumentsForAuthorization {
 
 			e.printStackTrace();
 		}
+		return response;
 	}
 
 
