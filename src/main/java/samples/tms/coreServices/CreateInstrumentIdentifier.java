@@ -4,6 +4,7 @@ import Api.InstrumentIdentifierApi;
 import Invokers.ApiClient;
 import Invokers.ApiException;
 import Model.Body;
+import Model.InlineResponse2007;
 import Model.InstrumentidentifiersCard;
 import Model.InstrumentidentifiersProcessingInformation;
 import Model.InstrumentidentifiersProcessingInformationAuthorizationOptions;
@@ -12,31 +13,32 @@ import Model.InstrumentidentifiersProcessingInformationAuthorizationOptionsIniti
 
 public class CreateInstrumentIdentifier {
 	private String responseCode = null;
-	private String responseMsg = null;
-	private String profileId="93B32398-AD51-4CC2-A682-EA3E93614EB1";
+	private String status = null;
+	static InlineResponse2007 response;
+	private String profileId = "93B32398-AD51-4CC2-A682-EA3E93614EB1";
 
 	Body body;
 
 	private Body getRequest() {
 		body = new Body();
-		
-		InstrumentidentifiersCard card=new InstrumentidentifiersCard();
+
+		InstrumentidentifiersCard card = new InstrumentidentifiersCard();
 		card.number("1234567890987654");
 		body.card(card);
-		
-		InstrumentidentifiersProcessingInformationAuthorizationOptionsInitiatorMerchantInitiatedTransaction merchantInitiatedTransaction=new InstrumentidentifiersProcessingInformationAuthorizationOptionsInitiatorMerchantInitiatedTransaction();
+
+		InstrumentidentifiersProcessingInformationAuthorizationOptionsInitiatorMerchantInitiatedTransaction merchantInitiatedTransaction = new InstrumentidentifiersProcessingInformationAuthorizationOptionsInitiatorMerchantInitiatedTransaction();
 		merchantInitiatedTransaction.previousTransactionId("123456789012345");
-		
-		InstrumentidentifiersProcessingInformationAuthorizationOptionsInitiator initiator=new InstrumentidentifiersProcessingInformationAuthorizationOptionsInitiator();
+
+		InstrumentidentifiersProcessingInformationAuthorizationOptionsInitiator initiator = new InstrumentidentifiersProcessingInformationAuthorizationOptionsInitiator();
 		initiator.merchantInitiatedTransaction(merchantInitiatedTransaction);
-		
-		InstrumentidentifiersProcessingInformationAuthorizationOptions authorizationOptions=new InstrumentidentifiersProcessingInformationAuthorizationOptions();
+
+		InstrumentidentifiersProcessingInformationAuthorizationOptions authorizationOptions = new InstrumentidentifiersProcessingInformationAuthorizationOptions();
 		authorizationOptions.initiator(initiator);
-		
-		InstrumentidentifiersProcessingInformation processingInformation=new InstrumentidentifiersProcessingInformation();
+
+		InstrumentidentifiersProcessingInformation processingInformation = new InstrumentidentifiersProcessingInformation();
 		processingInformation.authorizationOptions(authorizationOptions);
 		body.processingInformation(processingInformation);
-		
+
 		return body;
 
 	}
@@ -49,24 +51,26 @@ public class CreateInstrumentIdentifier {
 		process();
 	}
 
-	private void process() throws Exception {
+	public InlineResponse2007 process() throws Exception {
 
 		try {
 			body = getRequest();
 
 			InstrumentIdentifierApi instrumentIdentifierApi = new InstrumentIdentifierApi();
-			instrumentIdentifierApi.instrumentidentifiersPost(profileId,body);
+			response = instrumentIdentifierApi.instrumentidentifiersPost(profileId, body);
 
-			responseCode = ApiClient.resp;
-			responseMsg = ApiClient.respmsg;
+			responseCode = ApiClient.responseCode;
+			status = ApiClient.status;
+
 			System.out.println("ResponseCode :" + responseCode);
-			System.out.println("ResponseMessage :" + responseMsg);
+			System.out.println("Status :" + status);
+			System.out.println(response.getId());
 
 		} catch (ApiException e) {
 
 			e.printStackTrace();
 		}
+		return response;
 	}
-
 
 }
